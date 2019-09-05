@@ -5,25 +5,46 @@
 
 # Algorítmos de Ordenação O(n^2)
 
+# Rsultados de algumas observações e experimentos:
+# Selection Sort é o algoritmo mais rápido
+# Insertion Sort tem desempenho mediano
+# Bubble Sort é o algoritmo mais lento
+
 from random import randint
+from time import time
 
 # Testa o desempenho dos 3 algorítmos (bubble, insertion e selection)
 # e exibe os resultados
-def teste_de_desempenho(funcao):
-    pass
+def teste_de_desempenho(n):
+    vetor_b = vetor_aleatorio(n)
+    vetor_i = vetor_b[:]
+    vetor_s = vetor_b[:]
 
-# Cria um vetor aleatorio de tamanhos variaveis
+    measure(selection_sort, vetor_s)
+    measure(insertion_sort, vetor_i)
+    measure(bubble_sort, vetor_b)
+
+# Mede o desempenho de cada função individualmente
+def measure(func, vetor):
+    start = time()
+    func(vetor)
+    finish = time()
+    t_exec = finish - start
+    
+    print(f'{func.__name__} ordena {len(vetor)} elementos em \t{t_exec} segundos.')
+
+# Cria um vetor aleatorio (sem números repetidos) de tamanhos variaveis
 def vetor_aleatorio(tam):
-	vetor = []
+    vetor = []
 
-	i = 0
-	while i < tam:
-		num = randint(0,tam)
-		if num not in vetor:
-			vetor.append(num)
-			i += 1
+    i = 0
+    while i < tam:
+        num = randint(0,tam)
+        if num not in vetor:
+            vetor.append(num)
+            i += 1
 
-	return vetor
+    return vetor
 
 # Troca os valores de posição dentro do vetor
 def swap(vetor, a, b):
@@ -31,10 +52,39 @@ def swap(vetor, a, b):
     vetor[a] = vetor[b]
     vetor[b] = aux
 
+# Implementação do Bubble Sort
+def bubble_sort(vetor):
+    tam = len(vetor)
+    i, j = 0, 0
+
+    while i < tam:
+        
+        while j < tam-1:
+            if vetor[j] > vetor[j+1]:
+                swap(vetor, j, j+1)
+            j += 1
+        
+        i += 1
+        j = 0
+
+# Implementação do Insertion Sort
+def insertion_sort(vetor):
+    tam = len(vetor)
+    i, j = 0, 0
+
+    while i < tam:
+        j = i
+
+        while (j != 0) and vetor[j] < vetor[j-1]:
+            swap(vetor, j, j-1)
+            j -= 1
+        
+        i += 1
+
 # Implementação do Selection Sort
 def selection_sort(vetor):
     menor = vetor[0]
-    i_menor = 0 # Indice do menor
+    i_menor = 0
     tam = len(vetor)
     i, j = 0, 0
 
@@ -52,51 +102,4 @@ def selection_sort(vetor):
         menor = 10000000
         i_menor = 10000000
 
-# Implementação do Insertion Sort
-def insertion_sort(vetor):
-    tam = len(vetor)
-    i, j = 0, 0
-
-    while i < tam:
-        j = i
-
-        while (j != 0) and vetor[j] < vetor[j-1]:
-            swap(vetor, j, j-1)
-            j -= 1
-        
-        i += 1
-
-# Implementação do Bubble Sort
-def bubble_sort(vetor):
-    tam = len(vetor)
-    i, j = 0, 0
-
-    while i < tam:
-        
-        while j < tam-1:
-            if vetor[j] > vetor[j+1]:
-                swap(vetor, j, j+1)
-            j += 1
-        
-        i += 1
-        j = 0
-
-# Alguns exemplos
-b = [8, 5, 2, 6, 9, 3, 1, 4, 0, 7]
-i = [8, 5, 2, 6, 9, 3, 1, 4, 0, 7]
-s = [8, 5, 2, 6, 9, 3, 1, 4, 0, 7]
-
-print('bubble')
-print(b)
-bubble_sort(b)
-print(b)
-
-print('insertion')
-print(i)
-insertion_sort(i)
-print(i)
-
-print('selection')
-print(s)
-selection_sort(s)
-print(s)
+teste_de_desempenho(10000)
