@@ -132,14 +132,15 @@ def teste_de_desempenho_aprimorado(mostrar_grafico=True):
     plt.plot(x, yb, 'r--', label='bubble sort')
     print('\n')
     
-    plt.axis([0, 5020, 0, 20])
-    plt.suptitle('Desempenho da função')
-    
-    plt.xlabel('n')
-    plt.ylabel('tempo')
-    
-    plt.legend(loc='upper left')
-    plt.show()
+    if mostrar_grafico:
+	    plt.axis([0, 5020, 0, 20])
+	    plt.suptitle('Desempenho da função')
+	    
+	    plt.xlabel('numero de elementos')
+	    plt.ylabel('tempo')
+	    
+	    plt.legend(loc='upper left')
+	    plt.show()
 
 # teste_de_desempenho(10000)
 teste_de_desempenho_aprimorado()
