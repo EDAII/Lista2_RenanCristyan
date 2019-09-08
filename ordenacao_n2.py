@@ -10,6 +10,7 @@
 # Insertion Sort tem desempenho mediano
 # Bubble Sort é o algoritmo mais lento
 
+import matplotlib.pyplot as plt
 from random import randint
 from time import time
 
@@ -25,15 +26,18 @@ def teste_de_desempenho(n):
     measure(bubble_sort, vetor_b)
 
 # Mede o desempenho de cada função individualmente
-def measure(func, vetor):
+def measure(func, vetor, retornar_t_exec=False):
     start = time()
     func(vetor)
     finish = time()
     t_exec = finish - start
-    
-    print(f'{func.__name__} ordena {len(vetor)} elementos em \t{t_exec} segundos.')
 
-# Cria um vetor aleatorio (sem números repetidos) de tamanhos variaveis
+    print('{} ordena {} elementos em \t{} segundos'.format(func.__name__, len(vetor), t_exec))
+
+    if retornar_t_exec:
+        return t_exec
+
+# Cria um vetor aleatorio (sem números repetidos) de tamanho variavel
 def vetor_aleatorio(tam):
     vetor = []
 
@@ -102,4 +106,40 @@ def selection_sort(vetor):
         menor = 10000000
         i_menor = 10000000
 
-teste_de_desempenho(10000)
+def teste_de_desempenho_aprimorado(mostrar_grafico=True):
+    x = [0]
+    ys, yi, yb = [0], [0], [0]
+
+    j = 1
+    while j <= 5:
+        x.append(1000*j)
+        ys.append(measure(selection_sort, vetor_aleatorio(1000*j), retornar_t_exec=True))
+        j += 1
+    plt.plot(x, ys, 'b--', label='selection sort')
+    print('\n')
+
+    j = 1
+    while j <= 5:
+        yi.append(measure(insertion_sort, vetor_aleatorio(1000*j), retornar_t_exec=True))
+        j += 1
+    plt.plot(x, yi, 'g--', label='insertion sort')
+    print('\n')
+
+    j = 1
+    while j <= 5:
+        yb.append(measure(bubble_sort, vetor_aleatorio(1000*j), retornar_t_exec=True))
+        j += 1
+    plt.plot(x, yb, 'r--', label='bubble sort')
+    print('\n')
+    
+    plt.axis([0, 5020, 0, 20])
+    plt.suptitle('Desempenho da função')
+    
+    plt.xlabel('n')
+    plt.ylabel('tempo')
+    
+    plt.legend(loc='upper left')
+    plt.show()
+
+# teste_de_desempenho(10000)
+teste_de_desempenho_aprimorado()
